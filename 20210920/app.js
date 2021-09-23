@@ -6,7 +6,7 @@ const express = require("express");
 const application = express();
 const path = require("path");
 const expressHandlebars = require("express-handlebars");
-// const bodyparser = require("body-parser");
+const bodyparser = require("body-parser");
 
 const irasaiController = require("./controllers/irasai");
 
