@@ -34,9 +34,31 @@ router.get("/", (req, res) => {
     .lean();
 });
 
+router.get("/rusiavimas/desc", (req, res) => {
+  irasaimodel
+    .find((erroras, informacija) => {
+      if (!erroras) {
+        informacija.forEach(function (item) {
+          var data = new Date(item.data);
+          item.data = data.toLocaleDateString("lt-LT");
+          item._id = item._id.toString();
+        });
+
+        res.render("list", { data: informacija });
+      } else {
+        res.send("Ivyko klaida");
+      }
+    })
+    .collation({ locale: "lt" })
+    .sort({ pavadinimas: -1 })
+    .lean();
+});
+
 //su get persuodama info, kuri matoma (atvaizduojam html is add.hbs)
 router.get("/pridejimas", (req, res) => {
   var date = new Date();
+  date = date.toLocaleDateString("lt-LT");
+
   res.render("add", { data: date });
 });
 
@@ -87,17 +109,57 @@ router.post("/submit", (req, res) => {
   res.redirect("/irasai");
 });
 
-// router.post("/paieska", (req, res) => {
-//   res.render("paieska");
+//perziuros funkcija
+router.get("/view/:id", (req, res) => {
+  const id = req.params.id;
+  irasaimodel
+    .findById(id)
+    .lean()
+    .then((info) => {
+      var data = new Date(info.data);
+      info.data = data.toLocaleDateString("lt-LT");
+      res.render("perziura", { view: info });
+    })
+    .catch((err) => {
+      res.json({
+        response: "fail",
+        message: err.message,
+      });
+    });
+});
+
+//istynimo funkcija
+// router.get("/delete/:id", (req, res) => {
+//   irasaimodel.findByIdAndRemove(req.params.id, function (err) {
+//     if (err) {
+//       // console.log("nera id");
+//       res.redirect("/irasai");
+//     } else {
+//       res.redirect("/irasai");
+//     }
+//   });
 // });
+
+router.get("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  irasaimodel
+    .findByIdAndRemove(id)
+    .then((info) => {
+      res.redirect("/irasai");
+    })
+    .catch((err) => {
+      res.json({
+        response: "fail",
+        message: err.message,
+      });
+    });
+});
 
 router.get("/paieska", (req, res) => {
   res.render("paieska");
 });
 
-// router.get("/paieska/:s", (req, res) => {
 router.post("/paieska", (req, res) => {
-  // const s = req.params.s;
   const s = req.body.s;
 
   irasaimodel
