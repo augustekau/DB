@@ -1,0 +1,11 @@
+{{! header ir footer visoje aplikacijoje isliks tokie patys/ 
+app.js faile tai aprasom 
+app.engine("hbs", hbs({
+    extname: "hbs",
+    defaultLayout: "layout",
+    layoutsDir: __dirname + "/views/template",
+  })
+); 135 eilute }}
+<div class="header">Cia yra header</div>
+<div>{{{body}}}</div>
+<div class="footer">Cia yra footer</div>
