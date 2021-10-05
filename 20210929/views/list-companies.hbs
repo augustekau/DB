@@ -1,0 +1,65 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .heading{ margin-top:80px }
+    </style>
+  </head>
+  <body>
+    <div class="heading mb-3">
+      <h1>
+        Imoniu sarasas
+      </h1>
+    </div>
+
+    {{#if messages}}
+      <div class="alert alert-{{status}}">{{messages}}</div>
+    {{/if}}
+
+    <table class="table table-striped">
+      <tr>
+        <th>
+          ID
+        </th>
+        <th>
+          Pavadinimas
+        </th>
+        <th>
+          Adresas
+        </th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+      </tr>
+
+      {{#each companies}}
+        <tr>
+          <td>
+            {{id}}
+          </td>
+          <td>
+            {{name}}
+          </td>
+          <td>
+            {{address}}
+          </td>
+          <td><a
+              href="/edit-company/{{id}}"
+              class="btn btn-outline-dark"
+            >Redaguoti</a></td>
+          <td><a
+              href="/delete-company/{{id}}"
+              class="btn btn-outline-dark btn-delete-company"
+            >Istrinti</a></td>
+        </tr>
+      {{/each}}
+    </table>
+
+  </body>
+</html>

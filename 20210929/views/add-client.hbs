@@ -1,0 +1,71 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .heading{ margin-top:80px }
+  </style>
+  <body>
+    <h1 class="heading mb-3">
+      Kliento pridejimas
+    </h1>
+    <form method="post" action="/add-client">
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kliento vardas</label>
+        <div class="col-sm-10">
+          <input type="text" name="name" value="" />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kliento pavarde</label>
+        <div class="col-sm-10">
+          <input type="text" name="surname" value="" />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Tel. numeris</label>
+        <div class="col-sm-10">
+          <input type="number" name="phone" value="" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Email adresas</label>
+        <div class="col-sm-10">
+          <input type="text" name="email" value="" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Nuotrauka</label>
+        <div class="col-sm-10">
+          <input type="text" name="photo" value="" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Komentaras</label>
+        <div class="col-sm-10">
+          <textarea
+            type="text"
+            name="comment"
+            rows="5"
+            cols="19"
+            value=""
+          ></textarea>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Imones ID</label>
+        <div class="col-sm-10">
+          <input type="text" name="company_id" value="" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-dark">Irasyti </button>
+    </form>
+
+  </body>
+</html>

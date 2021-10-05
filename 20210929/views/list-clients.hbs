@@ -1,0 +1,81 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .heading{ margin-top:80px }
+    </style>
+  </head>
+  <body>
+    <div class="heading mb-3">
+      <h1>
+        Klientu sarasas
+      </h1>
+    </div>
+
+    {{#if messages}}
+      <div class="alert alert-{{status}}">{{messages}}</div>
+    {{/if}}
+
+    <table class="table table-striped">
+      <tr>
+        <th>
+          ID
+        </th>
+        <th>
+          Vardas
+        </th>
+        <th>
+          Pavarde
+        </th>
+        <th>
+          Tel. numeris
+        </th>
+        <th>
+          Email adresas
+        </th>
+        <th>
+          Nuotrauka
+        </th>
+        <th>
+          Komentaras
+        </th>
+        <th>
+          Imones ID
+        </th>
+      </tr>
+      {{! must be same as in db }}
+      {{#each customers}}
+        <tr>
+          <td>
+            {{id}}
+          </td>
+          <td>
+            {{name}}
+          </td>
+          <td>
+            {{surname}}
+          </td>
+          <td>
+            {{phone}}
+          </td>
+          <td>
+            {{email}}
+          </td>
+          <td>
+            {{photo}}
+          </td>
+          <td>
+            {{comment}}
+          </td>
+          <td>
+            {{company_id}}
+          </td>
+        </tr>
+      {{/each}}
+    </table>
+
+  </body>
+</html>
