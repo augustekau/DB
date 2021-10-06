@@ -45,6 +45,10 @@
         <th>
           Imones ID
         </th>
+        <th>
+        </th>
+        <th>
+        </th>
       </tr>
       {{! must be same as in db }}
       {{#each customers}}
@@ -64,15 +68,26 @@
           <td>
             {{email}}
           </td>
-          <td>
-            {{photo}}
-          </td>
+          <td>{{#if photo}}<img
+                src="/uploads/{{photo}}"
+                width="50"
+                height="50"
+              />{{/if}}</td>
           <td>
             {{comment}}
           </td>
           <td>
             {{company_id}}
           </td>
+
+          <td><a
+              href="/edit-client/{{id}}"
+              class="btn btn-outline-dark"
+            >Redaguoti</a></td>
+          <td><a
+              href="/delete-client/{{id}}"
+              class="btn btn-outline-dark btn-delete-company"
+            >Istrinti</a></td>
         </tr>
       {{/each}}
     </table>

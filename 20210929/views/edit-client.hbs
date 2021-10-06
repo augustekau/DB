@@ -1,0 +1,87 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .heading{ margin-top:80px } input, textarea{ width:100% }
+  </style>
+  <body>
+    <h1 class="heading mb-3">
+      Kliento duomenu keitimas
+    </h1>
+    {{#if messages}}
+      <div class="alert alert-{{status}}">{{messages}}</div>
+    {{/if}}
+    <form method="post" action="/edit-client">
+      {{#each edit_client}}
+        <input type="hidden" name="id" value="{{this.id}}" />
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Kliento vardas</label>
+          <div class="col-sm-10">
+            <input type="text" name="name" value="{{this.name}}" />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Kliento pavarde</label>
+          <div class="col-sm-10">
+            <input type="text" name="surname" value="{{this.surname}}" />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Tel. numeris</label>
+          <div class="col-sm-10">
+            <input type="text" name="phone" value="{{this.phone}}" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Email adresas</label>
+          <div class="col-sm-10">
+            <input type="text" name="email" value="{{this.email}}" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label
+            for="formFile"
+            class="col-sm-2 col-form-label"
+          >Nuotrauka</label>
+          <div class="col-sm-10">
+            <input class="form-control" type="file" id="formFile" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Komentaras</label>
+          <div class="col-sm-10">
+            <textarea
+              type="text"
+              name="comment"
+              rows="5"
+              value=""
+            >{{{this.comment}}}</textarea>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Imones ID</label>
+          <div class="col-sm-10">
+
+            <select name="company" , id="company">
+              <option value="0">
+                Bedarbis
+              </option>
+              {{#each companies}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+            {{! <input type="text" name="company_id" value="" /> }}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-outline-dark">Redaguoti</button>
+      {{/each}}
+    </form>
+
+  </body>
+</html>

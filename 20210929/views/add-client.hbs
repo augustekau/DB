@@ -6,14 +6,16 @@
     <title>Document</title>
   </head>
   <style>
-    .heading{ margin-top:80px }
+    .heading{ margin-top:80px } input, textarea{ width:100% }
   </style>
   <body>
     <h1 class="heading mb-3">
       Kliento pridejimas
     </h1>
+    {{#if messages}}
+      <div class="alert alert-{{status}}">{{messages}}</div>
+    {{/if}}
     <form method="post" action="/add-client">
-
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Kliento vardas</label>
         <div class="col-sm-10">
@@ -31,7 +33,7 @@
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Tel. numeris</label>
         <div class="col-sm-10">
-          <input type="number" name="phone" value="" />
+          <input type="text" name="phone" value="" />
         </div>
       </div>
       <div class="row mb-3">
@@ -41,27 +43,30 @@
         </div>
       </div>
       <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Nuotrauka</label>
+        <label for="formFile" class="col-sm-2 col-form-label">Nuotrauka</label>
         <div class="col-sm-10">
-          <input type="text" name="photo" value="" />
+          <input class="form-control" type="file" id="formFile" />
         </div>
       </div>
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Komentaras</label>
         <div class="col-sm-10">
-          <textarea
-            type="text"
-            name="comment"
-            rows="5"
-            cols="19"
-            value=""
-          ></textarea>
+          <textarea type="text" name="comment" rows="5" value=""></textarea>
         </div>
       </div>
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Imones ID</label>
         <div class="col-sm-10">
-          <input type="text" name="company_id" value="" />
+
+          <select name="company" , id="company">
+            <option value="0">
+              Bedarbis
+            </option>
+            {{#each companies}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+          {{! <input type="text" name="company_id" value="" /> }}
         </div>
       </div>
       <button type="submit" class="btn btn-outline-dark">Irasyti </button>
