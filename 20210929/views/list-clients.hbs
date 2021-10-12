@@ -78,9 +78,11 @@
             {{!-- <td>
               {{comment}}
             </td> --}}
-            <td>
+            {{!-- <td>
               {{company_id}}
-            </td>
+            </td> --}}
+            {{! kad imone matytu liste }}
+            <td>{{#if company_name}}{{company_name}}{{else}}Bedarbis{{/if}}</td>
 
             <td><a
                 href="/edit-client/{{id}}"

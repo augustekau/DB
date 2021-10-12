@@ -31,14 +31,23 @@ const app = express.Router();
 app.get("/list-clients", (req, res) => {
   let messages = req.query.m;
   let status = req.query.s;
-  db.query(`SELECT * FROM customers`, (err, resp) => {
-    if (!err) {
-      //must be same as in db - customers
-      res.render("list-clients", { customers: resp, messages, status });
-    } else {
-      res.redirect("/list-clients/?message=Įvyko klaida&s=danger");
+  //kad imoniu pavadinimai, o ne indeksai atsispindetu liste
+  db.query(
+    `SELECT c.id, c.name, 
+    c.surname, c.phone, c.email, 
+    c.photo, c.company_id, 
+    co.name AS company_name FROM customers AS c
+    LEFT JOIN companies AS co
+    ON c.company_id = co.id`,
+    (err, resp) => {
+      if (!err) {
+        //must be same as in db - customers
+        res.render("list-clients", { customers: resp, messages, status });
+      } else {
+        res.redirect("/list-clients/?message=Įvyko klaida&s=danger");
+      }
     }
-  });
+  );
 });
 
 //atvaizduoti add clients
@@ -303,5 +312,36 @@ app.get("/delete-client/:id", (req, res) => {
     }
   });
 });
+
+//kad istrinti nuotraukas is upload folderio // neveikia
+
+// app.get("/delete-client/:id", (req, res) => {
+//   let id = req.params.id;
+
+//   db.query(`SELECT photo FROM customers WHERE id = ${id}`, (err, customer) => {
+//     if (!err) {
+//       if (customer[0]["photo"]) {
+//         fs.unlink(
+//           __dirname + "../../uploads/" + customer[0]["photo"],
+//           (err) => {
+//             if (err) {
+//               res.redirect(
+//                 "/list-clients/?m=Nepavyko ištrinti nuotraukos&s=danger"
+//               );
+//             }
+//           }
+//         );
+//       }
+
+//       db.query(`DELETE FROM customers WHERE id = ${id}`, (err, resp) => {
+//         if (!err) {
+//           res.redirect("/list-clients/?m=Įrašas sėkmingai ištrintas&s=success");
+//         } else {
+//           res.redirect("/list-clients/?m=Nepavyko ištrinti įrašo&s=danger");
+//         }
+//       });
+//     }
+//   });
+// });
 
 module.exports = app;
