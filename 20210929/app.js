@@ -12,12 +12,9 @@ const session = require("express-session");
 //issaugos info i cookies kai mes prisijungiame // LOGIN
 app.use(
   session({
-    cookie: {
-      maxAge: 36000000,
-      httpOnly: false, // <- set httpOnly to false
-    },
-    secret: "MySecret",
-    secure: false,
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
   })
 );
 
@@ -65,16 +62,13 @@ app.use("/", companiesController);
 
 //kuriam route
 
-app.get("/", (req, res) => {
-  req.session.home = true;
-  //res.render('add-company');
+app.get("/login", (req, res) => {
   res.render("login");
 
   console.log(req.session);
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.session);
   let user = req.body.email;
   let pass = req.body.password;
 
@@ -83,7 +77,7 @@ app.post("/login", (req, res) => {
       `SELECT * FROM users WHERE email = '${user}' AND password = '${pass}'`,
       (err, user) => {
         if (!err && user.length > 0) {
-          req.session.abd = true;
+          req.session.auth = true;
         }
       }
     );

@@ -31,23 +31,43 @@ const app = express.Router();
 app.get("/list-clients", (req, res) => {
   let messages = req.query.m;
   let status = req.query.s;
-  //kad imoniu pavadinimai, o ne indeksai atsispindetu liste
-  db.query(
-    `SELECT c.id, c.name, 
+  let company_id = req.query.company_id;
+  let where = company_id ? "WHERE c.company_id = " + company_id : "";
+
+  db.query(`SELECT * FROM companies`, (err, companies) => {
+    if (!err) {
+      //Sutikriname kompanijas ar kuri nors iš jų buvo priskirta klientui,
+      companies.forEach(function (val, index) {
+        //Jeigu einamas kompanijos id atitinka id iš kliento informacijos, prisikiriame naują indeksą ir reikšmę
+        if (company_id == val["id"]) companies[index]["selected"] = true;
+      });
+      //kad imoniu pavadinimai, o ne indeksai atsispindetu liste
+      db.query(
+        `SELECT c.id, c.name, 
     c.surname, c.phone, c.email, 
     c.photo, c.company_id, 
     co.name AS company_name FROM customers AS c
     LEFT JOIN companies AS co
-    ON c.company_id = co.id`,
-    (err, resp) => {
-      if (!err) {
-        //must be same as in db - customers
-        res.render("list-clients", { customers: resp, messages, status });
-      } else {
-        res.redirect("/list-clients/?message=Įvyko klaida&s=danger");
-      }
+    ON c.company_id = co.id ${where} ORDER BY c.name DESC`,
+        (err, resp) => {
+          if (!err) {
+            //must be same as in db - customers
+            res.render("list-clients", {
+              customers: resp,
+              companies,
+              messages,
+              status,
+            });
+          } else {
+            res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+          }
+        }
+      );
+    } else {
+      res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+      return;
     }
-  );
+  });
 });
 
 //atvaizduoti add clients
@@ -313,6 +333,8 @@ app.get("/delete-client/:id", (req, res) => {
   });
 });
 
+module.exports = app;
+
 //kad istrinti nuotraukas is upload folderio // neveikia
 
 // app.get("/delete-client/:id", (req, res) => {
@@ -343,5 +365,3 @@ app.get("/delete-client/:id", (req, res) => {
 //     }
 //   });
 // });
-
-module.exports = app;
