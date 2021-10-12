@@ -19,78 +19,84 @@
       <div class="alert alert-{{status}}">{{messages}}</div>
     {{/if}}
 
-    <table class="table table-striped">
-      <tr>
-        <th>
-          ID
-        </th>
-        <th>
-          Vardas
-        </th>
-        <th>
-          Pavarde
-        </th>
-        <th>
-          Tel. numeris
-        </th>
-        <th>
-          Email adresas
-        </th>
-        <th>
-          Nuotrauka
-        </th>
-        <th>
-          Komentaras
-        </th>
-        <th>
-          Imones ID
-        </th>
-        <th>
-        </th>
-        <th>
-        </th>
-      </tr>
-      {{! must be same as in db }}
-      {{#each customers}}
+    {{#if customers}}
+      <table class="table table-striped">
         <tr>
-          <td>
-            {{id}}
-          </td>
-          <td>
-            {{name}}
-          </td>
-          <td>
-            {{surname}}
-          </td>
-          <td>
-            {{phone}}
-          </td>
-          <td>
-            {{email}}
-          </td>
-          <td>{{#if photo}}<img
-                src="/uploads/{{photo}}"
-                width="50"
-                height="50"
-              />{{/if}}</td>
-          <td>
-            {{comment}}
-          </td>
-          <td>
-            {{company_id}}
-          </td>
-
-          <td><a
-              href="/edit-client/{{id}}"
-              class="btn btn-outline-dark"
-            >Redaguoti</a></td>
-          <td><a
-              href="/delete-client/{{id}}"
-              class="btn btn-outline-dark btn-delete-company"
-            >Istrinti</a></td>
+          <th>
+            ID
+          </th>
+          <th>
+            Nuotrauka
+          </th>
+          <th>
+            Vardas
+          </th>
+          <th>
+            Pavarde
+          </th>
+          <th>
+            Tel. numeris
+          </th>
+          <th>
+            Email adresas
+          </th>
+          {{! <th>
+            Komentaras
+          </th> }}
+          <th>
+            Imone
+          </th>
+          <th>
+          </th>
+          <th>
+          </th>
         </tr>
-      {{/each}}
-    </table>
+        {{! must be same as in clients js }}
+        {{#each customers}}
+          <tr>
+            <td>
+              {{id}}
+            </td>
+            <td>{{#if photo}}<img
+                  src="/uploads/{{photo}}"
+                  width="50"
+                  height="50"
+                />{{/if}}</td>
+            <td>
+              {{name}}
+            </td>
+            <td>
+              {{surname}}
+            </td>
+            <td>
+              {{phone}}
+            </td>
+            <td>
+              {{email}}
+            </td>
 
+            {{!-- <td>
+              {{comment}}
+            </td> --}}
+            <td>
+              {{company_id}}
+            </td>
+
+            <td><a
+                href="/edit-client/{{id}}"
+                class="btn btn-outline-dark"
+              >Redaguoti</a></td>
+            <td><a
+                href="/delete-client/{{id}}"
+                class="btn btn-outline-dark btn-delete-company"
+              >Istrinti</a></td>
+          </tr>
+        {{/each}}
+      </table>
+    {{else}}
+
+      <h4>Šiuo metu duomenų bazėje nėra įvestų klientų.</h4>
+
+    {{/if}}
   </body>
 </html>

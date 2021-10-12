@@ -15,72 +15,86 @@
     {{#if messages}}
       <div class="alert alert-{{status}}">{{messages}}</div>
     {{/if}}
-    <form method="post" action="/edit-client">
-      {{#each edit_client}}
-        <input type="hidden" name="id" value="{{this.id}}" />
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Kliento vardas</label>
-          <div class="col-sm-10">
-            <input type="text" name="name" value="{{this.name}}" />
-          </div>
+    <form
+      method="post"
+      action="/edit-client/{{edit_client.id}}"
+      enctype="multipart/form-data"
+    >
+      {{!-- {{#each edit_client}} --}}
+      <input type="hidden" name="id" value="{{edit_client.id}}" />
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kliento vardas</label>
+        <div class="col-sm-10">
+          <input type="text" name="name" value="{{edit_client.name}}" />
         </div>
+      </div>
 
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Kliento pavarde</label>
-          <div class="col-sm-10">
-            <input type="text" name="surname" value="{{this.surname}}" />
-          </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kliento pavarde</label>
+        <div class="col-sm-10">
+          <input type="text" name="surname" value="{{edit_client.surname}}" />
         </div>
+      </div>
 
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Tel. numeris</label>
-          <div class="col-sm-10">
-            <input type="text" name="phone" value="{{this.phone}}" />
-          </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Tel. numeris</label>
+        <div class="col-sm-10">
+          <input type="text" name="phone" value="{{edit_client.phone}}" />
         </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Email adresas</label>
-          <div class="col-sm-10">
-            <input type="text" name="email" value="{{this.email}}" />
-          </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Email adresas</label>
+        <div class="col-sm-10">
+          <input type="text" name="email" value="{{edit_client.email}}" />
         </div>
-        <div class="row mb-3">
-          <label
-            for="formFile"
-            class="col-sm-2 col-form-label"
-          >Nuotrauka</label>
-          <div class="col-sm-10">
-            <input class="form-control" type="file" id="formFile" />
-          </div>
+      </div>
+      <div class="row mb-3">
+        <label for="formFile" class="col-sm-2 col-form-label">Nuotrauka</label>
+        <div class="col-sm-10">   
+        {{#if edit_client.photo}}
+            <div class="clearfix">
+                <div class="float-start" style="padding-right: 20px;">
+                    <img src="/uploads/{{edit_client.photo}}" style="max-height: 100px;" />
+                </div>
+                <div class="float-start">
+                    <input type="file" name="photo" id="photo" class="form-control" value="" />
+                    <div class="pt-2">
+                        <input type="checkbox" name="delete_photo" id="delete_photo" value="1" />
+                        <label for="delete_photo" class="form-label">Ištrinti nuotrauką</label>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <input type="file" name="photo" id="photo" class="form-control" value="" />
+        {{/if}}
         </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Komentaras</label>
-          <div class="col-sm-10">
-            <textarea
-              type="text"
-              name="comment"
-              rows="5"
-              value=""
-            >{{{this.comment}}}</textarea>
-          </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Komentaras</label>
+        <div class="col-sm-10">
+          <textarea
+            type="text"
+            name="comment"
+            rows="5"
+            value=""
+          >{{{edit_client.comment}}}</textarea>
         </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Imones ID</label>
-          <div class="col-sm-10">
-
-            <select name="company" , id="company">
-              <option value="0">
-                Bedarbis
-              </option>
-              {{#each companies}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-            {{! <input type="text" name="company_id" value="" /> }}
-          </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Imone</label>
+        <div class="col-sm-10">
+          <select name="company" , id="company">
+            <option value="0">
+              Bedarbis
+            </option>
+            {{#each companies}}
+              <option value="{{id}}"{{#if selected}}selected="selected"{{/if}}>{{name}}</option>
+            {{/each}}
+          </select>
         </div>
-        <button type="submit" class="btn btn-outline-dark">Redaguoti</button>
-      {{/each}}
+      </div>
+      <button type="submit" class="btn btn-outline-dark">Redaguoti</button>
+      {{!-- {{/each}} --}}
     </form>
 
   </body>
