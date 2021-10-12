@@ -3,21 +3,23 @@ const express = require("express");
 const hbs = require("express-handlebars");
 const app = express();
 const path = require("path");
+const db = require("./db/connection");
 const companiesController = require("./controllers/companies");
 const clientsController = require("./controllers/clients");
 
-const db = require("./db/connection");
-const validator = require("validator");
-
-// const session = require("express-session");
-// //issaugos info i cookies kai mes prisijungiame // LOGIN
-// app.use(
-//   session({
-//     secret: "",
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
+//express-session
+const session = require("express-session");
+//issaugos info i cookies kai mes prisijungiame // LOGIN
+app.use(
+  session({
+    cookie: {
+      maxAge: 36000000,
+      httpOnly: false, // <- set httpOnly to false
+    },
+    secret: "MySecret",
+    secure: false,
+  })
+);
 
 //be sitos eilutes mums nerodo surasyto duomenu i json
 app.use(
@@ -62,11 +64,32 @@ app.use("/", clientsController);
 app.use("/", companiesController);
 
 //kuriam route
-app.get("/login", (req, res) => {
-  //   db.query("SHOW DATABASES", (err, resp) => {
-  //     console.log(resp);
-  //   });
+
+app.get("/", (req, res) => {
+  req.session.home = true;
+  //res.render('add-company');
   res.render("login");
+
+  console.log(req.session);
+});
+
+app.post("/login", (req, res) => {
+  console.log(req.session);
+  let user = req.body.email;
+  let pass = req.body.password;
+
+  if (user && pass) {
+    db.query(
+      `SELECT * FROM users WHERE email = '${user}' AND password = '${pass}'`,
+      (err, user) => {
+        if (!err && user.length > 0) {
+          req.session.abd = true;
+        }
+      }
+    );
+  }
+
+  res.send("Sekmingai prisijungete");
 });
 
 app.listen("3000");
