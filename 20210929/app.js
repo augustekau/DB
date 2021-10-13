@@ -34,6 +34,7 @@ app.engine(
     defaultLayout: "layout",
     //nuvedam iki layout
     layoutsDir: __dirname + "/views/template",
+    helpers: require("./config/handlebars-helpers"),
   })
 );
 //prieinam prie views failo,

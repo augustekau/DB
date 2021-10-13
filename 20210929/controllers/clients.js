@@ -31,8 +31,19 @@ const app = express.Router();
 app.get("/list-clients", (req, res) => {
   let messages = req.query.m;
   let status = req.query.s;
-  let company_id = req.query.company_id;
-  let where = company_id ? "WHERE c.company_id = " + company_id : "";
+  let company_id = req.query.company_id != -1 ? req.query.company_id : "";
+  let order_by = req.query.order_by;
+  let position = req.query.position;
+  let query_a = company_id ? "WHERE c.company_id = " + company_id : "";
+  let query_b =
+    req.query.order_by && req.query.order_by != -1
+      ? "ORDER BY c." + req.query.order_by
+      : "";
+  let query_c = "";
+
+  if (req.query.position == 1) query_c = "ASC";
+
+  if (req.query.position == 2) query_c = "DESC";
 
   db.query(`SELECT * FROM companies`, (err, companies) => {
     if (!err) {
@@ -48,12 +59,14 @@ app.get("/list-clients", (req, res) => {
     c.photo, c.company_id, 
     co.name AS company_name FROM customers AS c
     LEFT JOIN companies AS co
-    ON c.company_id = co.id ${where} ORDER BY c.name DESC`,
+    ON c.company_id = co.id ${query_a} ${query_b} ${query_c}`,
         (err, resp) => {
           if (!err) {
             //must be same as in db - customers
             res.render("list-clients", {
               customers: resp,
+              order_by,
+              position,
               companies,
               messages,
               status,
