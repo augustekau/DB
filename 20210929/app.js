@@ -9,6 +9,10 @@ const clientsController = require("./controllers/clients");
 
 //express-session
 const session = require("express-session");
+
+//md5 modulis
+const md5 = require("md5");
+
 //issaugos info i cookies kai mes prisijungiame // LOGIN
 app.use(
   session({
@@ -17,6 +21,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+app.use(function (req, res, next) {
+  app.locals.auth = req.session.auth ? true : false;
+  next();
+});
 
 //be sitos eilutes mums nerodo surasyto duomenu i json
 app.use(
@@ -62,16 +71,21 @@ app.use("/", clientsController);
 app.use("/", companiesController);
 
 //kuriam route
-
-app.get("/login", (req, res) => {
-  res.render("login");
-
-  console.log(req.session);
+app.get("/", (req, res) => {
+  if (req.session.auth) res.render("list-clients");
+  else res.render("login");
 });
+
+// app.get("/login", (req, res) => {
+//   res.render("login");
+
+//   console.log(req.session);
+// });
 
 app.post("/login", (req, res) => {
   let user = req.body.email;
-  let pass = req.body.password;
+  // let pass = req.body.password;
+  let pass = md5(req.body.password);
 
   if (user && pass) {
     db.query(
@@ -79,12 +93,25 @@ app.post("/login", (req, res) => {
       (err, user) => {
         if (!err && user.length > 0) {
           req.session.auth = true;
+          req.session.user = user;
+
+          let hour = 3600000;
+          req.session.cookie.expires = new Date(Date.now() + hour);
+          req.session.cookie.maxAge = hour;
+
+          req.session.save();
         }
       }
     );
   }
 
-  res.send("Sekmingai prisijungete");
+  res.redirect("/");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+
+  res.redirect("/");
 });
 
 app.listen("3000");

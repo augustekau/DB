@@ -4,6 +4,11 @@ const db = require("../db/connection");
 const app = express.Router();
 
 app.get("/add-company", (req, res) => {
+  // if (!req.session.auth) {
+  //   res.redirect("/");
+  //   return;
+  // }
+
   res.render("add-company");
 });
 

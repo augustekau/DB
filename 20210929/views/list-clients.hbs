@@ -124,6 +124,14 @@
           </tr>
         {{/each}}
       </table>
+
+      <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        {{#each pager}}
+            <li class="page-item"><a class="page-link" href="/list-clients/{{this}}">{{this}}</a></li>
+        {{/each}}
+      </ul>
+      </nav>
     {{else}}
 
       <h4>Šiuo metu duomenų bazėje nėra įvestų klientų.</h4>

@@ -35,7 +35,7 @@ app.engine("hbs", hbs({
       <!-- Fixed navbar -->
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container">
-          <a class="navbar-brand" href="/login">Pagrindinis</a>
+          <a class="navbar-brand" href="/">Pagrindinis</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -68,7 +68,11 @@ app.engine("hbs", hbs({
                 <li class="nav-item">
                 <a class="nav-link" href="/add-client">Prideti klienta</a>
               </li>
-
+{{#if this.auth}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Atisijungti</a>
+                    </li>
+                {{/if}}
             </ul>
           </div>
         </div>

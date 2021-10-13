@@ -25,10 +25,81 @@ const upload = multer({
 });
 const db = require("../db/connection");
 const app = express.Router();
+const per_page = 2;
 
 //atvaizduoti klientu sarasa
 
+// app.get("/list-clients", (req, res) => {
+//   let messages = req.query.m;
+//   let status = req.query.s;
+//   let company_id = req.query.company_id != -1 ? req.query.company_id : "";
+//   let order_by = req.query.order_by;
+//   let position = req.query.position;
+//   let query_a = company_id ? "WHERE c.company_id = " + company_id : "";
+//   let query_b =
+//     req.query.order_by && req.query.order_by != -1
+//       ? "ORDER BY c." + req.query.order_by
+//       : "";
+//   let query_c = "";
+
+//   if (req.query.position == 1) query_c = "ASC";
+
+//   if (req.query.position == 2) query_c = "DESC";
+
+//   db.query(`SELECT COUNT(*) count FROM customers`, (err, kiekis) => {
+//     let customers_count = kiekis[0].count;
+//     let page_count = customers_count / per_page;
+//     let pager = [];
+
+//     for (let i = 1; i <= page_count; i++) pager.push(i);
+
+//     db.query(`SELECT * FROM companies`, (err, companies) => {
+//       if (!err) {
+//         if (company_id) {
+//           //Sutikriname kompanijas ar kuri nors iš jų buvo priskirta klientui,
+//           companies.forEach(function (val, index) {
+//             //Jeigu einamas kompanijos id atitinka id iš kliento informacijos, prisikiriame naują indeksą ir reikšmę
+//             if (company_id == val["id"]) companies[index]["selected"] = true;
+//           });
+//         }
+//         //kad imoniu pavadinimai, o ne indeksai atsispindetu liste
+//         db.query(
+//           `SELECT c.id, c.name,
+//     c.surname, c.phone, c.email,
+//     c.photo, c.company_id,
+//     co.name AS company_name FROM customers AS c
+//     LEFT JOIN companies AS co
+//     ON c.company_id = co.id ${query_a} ${query_b} ${query_c}`,
+//           (err, resp) => {
+//             if (!err) {
+//               //must be same as in db - customers
+//               res.render("list-clients", {
+//                 customers: resp,
+//                 order_by,
+//                 position,
+//                 companies,
+//                 messages,
+//                 status,
+//                 pager,
+//               });
+//             } else {
+//               res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+//             }
+//           }
+//         );
+//       } else {
+//         res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+//       }
+//     });
+//   });
+// });
+
 app.get("/list-clients", (req, res) => {
+  //   if (!req.session.auth) {
+  //     res.redirect("/");
+  //     return;
+  //   }
+
   let messages = req.query.m;
   let status = req.query.s;
   let company_id = req.query.company_id != -1 ? req.query.company_id : "";
@@ -45,41 +116,131 @@ app.get("/list-clients", (req, res) => {
 
   if (req.query.position == 2) query_c = "DESC";
 
-  db.query(`SELECT * FROM companies`, (err, companies) => {
-    if (!err) {
-      //Sutikriname kompanijas ar kuri nors iš jų buvo priskirta klientui,
-      companies.forEach(function (val, index) {
-        //Jeigu einamas kompanijos id atitinka id iš kliento informacijos, prisikiriame naują indeksą ir reikšmę
-        if (company_id == val["id"]) companies[index]["selected"] = true;
-      });
-      //kad imoniu pavadinimai, o ne indeksai atsispindetu liste
-      db.query(
-        `SELECT c.id, c.name, 
-    c.surname, c.phone, c.email, 
-    c.photo, c.company_id, 
-    co.name AS company_name FROM customers AS c
-    LEFT JOIN companies AS co
-    ON c.company_id = co.id ${query_a} ${query_b} ${query_c}`,
-        (err, resp) => {
-          if (!err) {
-            //must be same as in db - customers
-            res.render("list-clients", {
-              customers: resp,
-              order_by,
-              position,
-              companies,
-              messages,
-              status,
-            });
-          } else {
-            res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
-          }
+  //if( !company_id.isInteger() || company.id == -1)
+
+  db.query(`SELECT COUNT(*) count FROM customers`, (err, kiekis) => {
+    // if (!req.session.auth) {
+    //   res.redirect("/");
+    //   return;
+    // }
+
+    let customers_count = kiekis[0].count;
+    let page_count = customers_count / per_page;
+    let pager = [];
+
+    for (let i = 1; i <= page_count; i++) pager.push(i);
+
+    db.query(`SELECT * FROM companies`, (err, companies) => {
+      if (!err) {
+        if (company_id) {
+          //Sutikriname kompanijas ar kuri nors iš jų buvo priskirta klientui,
+          companies.forEach(function (val, index) {
+            //Jeigu einamas kompanijos id atitinka id iš kliento informacijos, prisikiriame naują indeksą ir reikšmę
+            if (company_id == val["id"]) companies[index]["selected"] = true;
+          });
         }
-      );
-    } else {
-      res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
-      return;
-    }
+
+        db.query(
+          `SELECT c.id, c.name, 
+                c.surname, c.phone, c.email, 
+                c.photo, c.company_id, 
+                co.name AS company_name FROM customers AS c
+                LEFT JOIN companies AS co
+                ON c.company_id = co.id ${query_a} ${query_b} ${query_c}`,
+          (err, customers) => {
+            if (!err) {
+              res.render("list-clients", {
+                customers: customers,
+                order_by,
+                position,
+                companies,
+                messages,
+                status,
+                pager,
+              });
+            } else {
+              res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+            }
+          }
+        );
+      } else {
+        res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+      }
+    });
+  });
+});
+
+app.get("/list-clients/:page", (req, res) => {
+  //   if (!req.session.auth) {
+  //     res.redirect("/");
+  //     return;
+  //   }
+
+  let page = req.params.page;
+  let messages = req.query.m;
+  let status = req.query.s;
+  let company_id = req.query.company_id != -1 ? req.query.company_id : "";
+  let order_by = req.query.order_by;
+  let position = req.query.position;
+  let query_a = company_id ? "WHERE c.company_id = " + company_id : "";
+  let query_b =
+    req.query.order_by && req.query.order_by != -1
+      ? "ORDER BY c." + req.query.order_by
+      : "";
+  let query_c = "";
+
+  if (req.query.position == 1) query_c = "ASC";
+
+  if (req.query.position == 2) query_c = "DESC";
+
+  //if( !company_id.isInteger() || company.id == -1)
+
+  db.query(`SELECT COUNT(*) count FROM customers`, (err, kiekis) => {
+    let customers_count = kiekis[0].count;
+    let page_count = customers_count / per_page;
+    let limitFrom = page == 1 ? 0 : per_page * (page - 1);
+    let limitTo = limitFrom + per_page;
+    let pager = [];
+
+    for (let i = 1; i <= page_count; i++) pager.push(i);
+
+    db.query(`SELECT * FROM companies`, (err, companies) => {
+      if (!err) {
+        if (company_id) {
+          //Sutikriname kompanijas ar kuri nors iš jų buvo priskirta klientui,
+          companies.forEach(function (val, index) {
+            //Jeigu einamas kompanijos id atitinka id iš kliento informacijos, prisikiriame naują indeksą ir reikšmę
+            if (company_id == val["id"]) companies[index]["selected"] = true;
+          });
+        }
+
+        db.query(
+          `SELECT c.id, c.name, 
+                c.surname, c.phone, c.email, 
+                c.photo, c.company_id, 
+                co.name AS company_name FROM customers AS c
+                LEFT JOIN companies AS co
+                ON c.company_id = co.id ${query_a} ${query_b} ${query_c} LIMIT ${limitFrom}, ${limitTo}`,
+          (err, customers) => {
+            if (!err) {
+              res.render("list-clients", {
+                customers: customers,
+                order_by,
+                position,
+                companies,
+                messages,
+                status,
+                pager,
+              });
+            } else {
+              res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+            }
+          }
+        );
+      } else {
+        res.redirect("/list-clients/?m=Įvyko klaida&s=danger");
+      }
+    });
   });
 });
 
