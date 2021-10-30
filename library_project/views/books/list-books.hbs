@@ -1,6 +1,6 @@
 <div class="heading mb-3">
   <h1>
-    AUTHORS LIST
+    Books list
   </h1>
 </div>
 
@@ -8,40 +8,55 @@
   <div class="alert alert-{{status}}">{{messages}}</div>
 {{/if}}
 
-{{#if authors}}
+{{#if books}}
   <table class="table table-striped">
     <tr>
       <th>
         ID
       </th>
       <th>
-        Name
+        Title
       </th>
       <th>
-        Surname
+        Pages
+      </th>
+      <th>
+        Short Description
+      </th>
+      <th>
+        Author
       </th>
       <th>
       </th>
       <th>
       </th>
     </tr>
-    {{#each authors}}
+    {{#each books}}
       <tr>
         <td>
           {{id}}
         </td>
         <td>
-          {{name}}
+          {{title}}
         </td>
         <td>
-          {{surname}}
+          {{pages}}
         </td>
+        <td>
+          {{short_description}}
+        </td>
+
+        <td>
+          {{author_name}}
+          {{author_surname}}
+        </td>
+
         <td><a
-            href="/edit-author/{{id}}"
+            href="/edit-book/{{id}}"
             class="btn btn-outline-dark"
           >Edit</a></td>
         <td><a
-            href="/delete-author/{{id}}"
+            href="/delete-book/{{id}}"
             class="btn btn-outline-dark btn-delete"
           >Delete</a></td>
       </tr>
@@ -49,5 +64,5 @@
   </table>
 
 {{else}}
-  <h4>There are no authors in the database</h4>
+  <h4>There are no books in the database</h4>
 {{/if}}

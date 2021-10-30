@@ -1,0 +1,43 @@
+<h1 class="heading">
+  Add book
+</h1>
+{{#if messages}}
+  <div class="alert alert-{{status}}">{{messages}}</div>
+{{/if}}
+<form method="post" action="/add-book">
+  <div class="row mb-3">
+    <label class="col-sm-2 col-form-label">Book title</label>
+    <div class="col-sm-10">
+      <input type="text" name="title" value="" />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-sm-2 col-form-label">Pages</label>
+    <div class="col-sm-10">
+      <input type="number" name="pages" value="" />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-sm-2 col-form-label">Short description</label>
+    <div class="col-sm-10">
+      <textarea
+        type="text"
+        name="short_description"
+        rows="5"
+        value=""
+      ></textarea>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-sm-2 col-form-label">Author</label>
+    <div class="col-sm-2">
+      <select name="author_id" class="form-control">
+        <option value="0">Select author</option>
+        {{#each authors}}
+          <option value="{{id}}">{{name}}{{surname}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+  <button type="submit" class="btn btn btn-outline-success">Submit</button>
+</form>

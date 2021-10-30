@@ -5,7 +5,7 @@ const path = require("path");
 const db = require("./db/connection");
 
 const authorsController = require("./controllers/authors");
-// const booksController = require("./controllers/books");
+const booksController = require("./controllers/books");
 // const usersController = require("./controllers/users");
 
 app.use(
@@ -39,7 +39,7 @@ app.use(
 );
 
 app.use("/", authorsController);
-// app.use("/", booksController);
+app.use("/", booksController);
 // app.use("/", usersController);
 
 app.listen("3000");

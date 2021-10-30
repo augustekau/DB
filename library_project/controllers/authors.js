@@ -9,7 +9,7 @@ app.get("/add-author", (req, res) => {
 });
 
 app.post("/add-author", (req, res) => {
-  //cia is to ka suvedem pasiimam name
+  //cia is to ka suvedem pasiimam name and surname
   let authorName = req.body.name;
   let authorSurname = req.body.surname;
 
@@ -42,7 +42,7 @@ app.post("/add-author", (req, res) => {
       }
       if (resp.length == 0) {
         db.query(
-          //kreipiames i db. ir idedam duomenis
+          //kreipiames i db ir idedam duomenis
           `INSERT INTO authors (name, surname) 
                     VALUES ( '${authorName}' , '${authorSurname}' )`,
           (err) => {
